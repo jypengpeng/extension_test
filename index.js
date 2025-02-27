@@ -1,7 +1,6 @@
 import { eventSource, event_types, saveSettingsDebounced, } from '../../../../script.js';
 import { extension_settings, getContext, renderExtensionTemplateAsync } from '../../../extensions.js';
 import { POPUP_TYPE, Popup, callGenericPopup } from '../../../popup.js';
-import JSON5 from './index.min.mjs'
 
 const extensionName = "extension_test";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
