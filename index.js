@@ -73,6 +73,7 @@ function onButtonClick() {
 // This function is called when the extension is loaded
 jQuery(async () => {
   // This is an example of loading HTML from a file
+    console.log("yipeng_test is loading");
   const settingsHtml = await $.get(`${extensionFolderPath}/example.html`);
 
   // Append settingsHtml to extensions_settings
