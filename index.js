@@ -30,25 +30,29 @@ async function loadSettings() {
   $("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
 }
 
-async function onChatCompletionPromptReady(eventData) {
-  try {
-      toastr.info("藤本树测试注入触发！");
-      // Skip if in dry run mode or extension is disabled
-      if (eventData.dryRun === true || !extension_settings.custom_prompt_injector.enabled) return;
-      toastr.info("藤本树测试注入开始！");
-      // Get the prompt content
-      const promptContent = extension_settings.custom_prompt_injector.prompt;
+// 当接收到新消息时触发
+eventSource.on(event_types.MESSAGE_RECEIVED, (data) => {
+    console.log(`[${new Date().toLocaleTimeString()}] MESSAGE_RECEIVED 事件触发 yipeng_test`, data);
+    // 你可以在此添加其他 onMessageReceived 的逻辑
+});
 
-      // Inject our prompt at a similar timing as the reference code
-      // Adding as a system message at the end of the chat
-      eventData.chat.push({ role: 'system', content: promptContent });
+// 当聊天补全提示准备好时触发
+eventSource.on(event_types.CHAT_COMPLETION_PROMPT_READY, (data) => {
+    console.log(`[${new Date().toLocaleTimeString()}] CHAT_COMPLETION_PROMPT_READY 事件触发 yipeng_test`, data);
+    // 你可以在此添加其他 onChatCompletionPromptReady 的逻辑
+});
 
-      toastr.info("Injected custom prompt:", promptContent);
-  } catch (error) {
-      toastr.info("Custom prompt injection failed:", error.message);
-  }
-}
+// 当消息被编辑时触发
+eventSource.on(event_types.MESSAGE_EDITED, (data) => {
+    console.log(`[${new Date().toLocaleTimeString()}] MESSAGE_EDITED 事件触发 yipeng_test`, data);
+    // 你可以在此添加其他 onMessageEdited 的逻辑
+});
 
+// 当消息被滑动（swipe）时触发
+eventSource.on(event_types.MESSAGE_SWIPED, (data) => {
+    console.log(`[${new Date().toLocaleTimeString()}] MESSAGE_SWIPED 事件触发 yipeng_test`, data);
+    // 你可以在此添加其他 onMessageSwiped 的逻辑
+});
 // This function is called when the extension settings are changed in the UI
 function onExampleInput(event) {
   const value = Boolean($(event.target).prop("checked"));
@@ -82,6 +86,9 @@ jQuery(async () => {
 
   // Load settings when starting things up (if you have any)
   loadSettings();
+  eventSource.on(event_types.MESSAGE_RECEIVED, onMessageReceived);
   eventSource.on(event_types.CHAT_COMPLETION_PROMPT_READY, onChatCompletionPromptReady);
-  console.log("Custom prompt injector extension initialized");
+    eventSource.on(event_types.MESSAGE_EDITED, onMessageEdited);
+    eventSource.on(event_types.MESSAGE_SWIPED, onMessageSwiped);
+  console.log("Custom prompt injector extension initialized yipeng_test");
 });
